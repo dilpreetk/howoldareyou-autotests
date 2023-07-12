@@ -18,6 +18,9 @@ public class MainPage extends AbstractPage {
 
     @FindBy(css = "#resultAge")
     private SelenideElement resultAge;
+    
+    @FindBy(id="resultName")
+    private SelenideElement resultName;
 
 
     public void typeUsername(String username) {
@@ -34,5 +37,9 @@ public class MainPage extends AbstractPage {
 
     public int getResultAgeText() {
         return Integer.parseInt(resultAge.should(Condition.visible).getText());
+    }
+    
+    public String getNametext() {
+    	return resultName.should(Condition.visible).getText();
     }
 }

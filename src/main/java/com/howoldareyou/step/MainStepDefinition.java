@@ -57,9 +57,31 @@ public class MainStepDefinition extends AbstractStepDefinition {
     public void verifyAge() {
         verifyAge(expectedAge);
     }
+    
+    @When("I type todays date and random year")
+    public void todaysDateRandomYear() {
+    	  typeBirthday(currentDateRandomYear);
+    }
+    
+    @When("I type {string} in username")
+    public void addUsername(String name) {
+    	typeUserName(name);
+    }
+    
+    @Then("^I see the correct age result for today date and random year")
+    public void verifyAgeForOnlyRandomYear() {
+        verifyAge(expectedAgeForOnlyRandomYear);
+    }
+    
+    @Then("I see the correct {string}")
+    public void verifyName(String name) {
+    	Assert.assertEquals(name, homePage.getNametext());
+    } 
 
     public String randomDateOfBirth = getRandomDateOfBirth();
     public int expectedAge = determineAge(randomDateOfBirth);
+    public String currentDateRandomYear = getTodaysDateRandomMonth();
+    public int expectedAgeForOnlyRandomYear=determineAge(currentDateRandomYear);
 
     public static String getRandomDateOfBirth() {
         Random random = new Random();
@@ -81,6 +103,18 @@ public class MainStepDefinition extends AbstractStepDefinition {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyy");
         LocalDate birthDate = LocalDate.parse(dateOfBirth, formatter);
         return Period.between(birthDate, currentDate).getYears();
+    }
+    
+    public static String getTodaysDateRandomMonth()
+    {
+    	Random random = new Random();
+        int minYear = 1900;
+        int currentYear = LocalDate.now().getYear();
+        int randomYear = random.nextInt(currentYear - minYear + 1) + minYear;
+        LocalDate todayDate = LocalDate.now();
+        LocalDate todayDateRandomYear = todayDate.withYear(randomYear);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyy");
+        return todayDateRandomYear.format(formatter);
     }
 
 }
